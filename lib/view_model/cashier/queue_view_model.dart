@@ -30,10 +30,11 @@ class QueueViewModel extends ChangeNotifier {
   }
 
   List<TransactionModel> get filteredTransactions {
-    if (_searchQuery.isEmpty) return _transactions;
-    return _transactions
-        .where((tx) =>
-            tx.id.toLowerCase().contains(_searchQuery.toLowerCase()))
-        .toList();
+    return _transactions.where((tx) {
+      final matchesQuery = tx.id.contains(_searchQuery);
+      final isPending = tx.status.toLowerCase() == 'pending';
+      return matchesQuery && isPending;
+    }).toList();
   }
+
 }
