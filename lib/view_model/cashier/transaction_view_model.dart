@@ -24,20 +24,20 @@ class TransactionViewModel extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    _orderItems = await _repository.fetchOrderItemsByTransactionId(transactionId); // ✅ correct method name
+    _orderItems = await _repository.fetchOrderItemsByTransactionId(transactionId);
 
     _isLoading = false;
     notifyListeners();
   }
 
   void updateQuantity(String orderItemId, int newQty) {
-  final index = _orderItems.indexWhere((item) => item.id == orderItemId);
-  if (index != -1) {
-    final updatedItem = _orderItems[index].copyWith(quantity: newQty);
-    _orderItems[index] = updatedItem;
-    notifyListeners();
+    final index = _orderItems.indexWhere((item) => item.id == orderItemId);
+    if (index != -1) {
+      final updatedItem = _orderItems[index].copyWith(quantity: newQty);
+      _orderItems[index] = updatedItem;
+      notifyListeners();
+    }
   }
-}
 
   void removeOrderItem(String orderItemId) {
     _orderItems.removeWhere((item) => item.id == orderItemId);
@@ -63,8 +63,9 @@ class TransactionViewModel extends ChangeNotifier {
       _selectedTransaction!.id,
       totalPrice,
     );
-}
-  Future<void> recordTransactionToSupabase() async {
+  }
+
+  Future<void> markAsPaid() async {
     if (_selectedTransaction == null) return;
 
     await _repository.markTransactionAsPaid(_selectedTransaction!.id);

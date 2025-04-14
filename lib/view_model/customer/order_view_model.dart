@@ -7,7 +7,6 @@ class OrderViewModel extends ChangeNotifier {
 
   List<OrderItem> get orderItems => List.unmodifiable(_orderItems);
 
-  
   void addToOrder(Product product) {
     final index = _orderItems.indexWhere((item) => item.product.id == product.id);
     if (index != -1) {
@@ -21,7 +20,6 @@ class OrderViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
- 
   void updateQuantity(Product product, int newQty) {
     final index = _orderItems.indexWhere((item) => item.product.id == product.id);
     if (index != -1) {
@@ -34,25 +32,29 @@ class OrderViewModel extends ChangeNotifier {
     }
   }
 
-  
   void removeFromOrder(Product product) {
     _orderItems.removeWhere((item) => item.product.id == product.id);
     notifyListeners();
   }
 
- 
   double get totalAmount =>
       _orderItems.fold(0, (sum, item) => sum + item.totalPrice);
-
 
   void clearOrder() {
     _orderItems.clear();
     notifyListeners();
   }
 
-  
   int getQuantityForProduct(Product product) {
     final index = _orderItems.indexWhere((item) => item.product.id == product.id);
     return index != -1 ? _orderItems[index].quantity : 1;
+  }
+
+  // ✅ ADD THIS GETTER ↓↓↓
+  List<Map<String, dynamic>> get orderItemSummaryList {
+    return _orderItems.map((item) => {
+      'product_id': item.product.id,
+      'quantity': item.quantity,
+    }).toList();
   }
 }

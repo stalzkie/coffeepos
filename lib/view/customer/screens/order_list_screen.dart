@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../view_model/customer/order_view_model.dart';
 import 'edit_order_screen.dart';
+import 'package:sonofabean_combined/view/customer/screens/choose_payment_screen.dart';
 
 class OrderListScreen extends StatelessWidget {
   const OrderListScreen({super.key});
@@ -9,6 +10,7 @@ class OrderListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<OrderViewModel>(context);
+    final summary = viewModel.orderItemSummaryList;
     final totalPrice = viewModel.orderItems.fold<double>(
       0,
       (sum, item) => sum + (item.product.price * item.quantity),
@@ -214,7 +216,21 @@ class OrderListScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/choosePayment'),
+                  onPressed: () {
+                    // Access orderItems from OrderViewModel
+                    final orderItems = Provider.of<OrderViewModel>(context, listen: false).orderItems;
+
+                    // Pass both totalPrice and orderItems to ChoosePaymentScreen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChoosePaymentScreen(
+                          totalPrice: totalPrice,
+                          orderItems: orderItems,  // Pass orderItems here
+                        ),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: const Color(0xFF1E1E1E),
                     backgroundColor: const Color(0xFF62FF6D),

@@ -9,7 +9,7 @@ Future<List<TransactionModel>> fetchAllTransactions() async {
   final response = await _client
       .from('transactions')
       .select()
-      .eq('payment_status', 'unpaid') // ✅ Filter here
+      .eq('status', 'unpaid') // ✅ Filter here
       .order('created_at', ascending: false);
 
   return (response as List)
@@ -73,7 +73,7 @@ Future<List<TransactionModel>> fetchAllTransactions() async {
   Future<void> markTransactionAsPaid(String transactionId) async {
     await _client
         .from('transactions')
-        .update({'payment_status': 'paid'}) // ✅ Make sure this field is updated
+        .update({'status': 'paid'}) // ✅ Make sure this field is updated
         .eq('id', transactionId);
   }
 }

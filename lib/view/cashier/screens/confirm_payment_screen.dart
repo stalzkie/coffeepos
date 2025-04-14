@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../view_model/cashier/transaction_view_model.dart';
 
 class ConfirmPaymentScreen extends StatefulWidget {
-  final double? totalPrice; // Make this nullable
+  final double? totalPrice;
 
   const ConfirmPaymentScreen({super.key, this.totalPrice});
 
@@ -20,7 +20,6 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // Use totalPrice from widget or fallback to arguments
     total = widget.totalPrice ??
         ModalRoute.of(context)?.settings.arguments as double? ??
         0.0;
@@ -89,12 +88,19 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
             GestureDetector(
               onTap: () async {
                 if (change != null) {
-                  print('Transaction marked as paid');
-                  if (context.mounted) {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/thankYou',
-                      (route) => false,
+                  try {
+                    await transactionVM.markAsPaid(); // ✅ mark as paid
+
+                    if (context.mounted) {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/thankYou',
+                        (route) => false,
+                      );
+                    }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to mark as paid: $e')),
                     );
                   }
                 } else {

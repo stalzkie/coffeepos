@@ -2,9 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../view_model/customer/payment_view_model.dart';
 import '../../../data/models/payment_model.dart';
+import '../../../data/models/order_item_model.dart'; // <-- Add this import
+import '../../../view_model/customer/order_view_model.dart';
 
 class ChoosePaymentScreen extends StatelessWidget {
-  const ChoosePaymentScreen({super.key});
+  final double totalPrice;
+  final List<OrderItem> orderItems;  // Use OrderItem as the type
+
+  const ChoosePaymentScreen({
+    super.key,
+    required this.totalPrice,
+    required this.orderItems,  // Add this parameter
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +49,6 @@ class ChoosePaymentScreen extends StatelessWidget {
 
           const SizedBox(height: 50),
 
-          // 📢 Title
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: Align(
@@ -61,7 +69,6 @@ class ChoosePaymentScreen extends StatelessWidget {
 
           const SizedBox(height: 40),
 
-          // 🟦 Payment Options
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
@@ -69,13 +76,13 @@ class ChoosePaymentScreen extends StatelessWidget {
                 _buildOption(
                   label: 'Gcash/QR Code',
                   isSelected: paymentVM.selectedMethod == PaymentMethod.gcash,
-                  onTap: () => paymentVM.selectPaymentMethod(PaymentMethod.gcash),
+                  onTap: () => paymentVM.selectMethod(PaymentMethod.gcash),
                 ),
                 const SizedBox(height: 20),
                 _buildOption(
                   label: 'Cash Payment',
                   isSelected: paymentVM.selectedMethod == PaymentMethod.cash,
-                  onTap: () => paymentVM.selectPaymentMethod(PaymentMethod.cash),
+                  onTap: () => paymentVM.selectMethod(PaymentMethod.cash),
                 ),
                 const SizedBox(height: 20),
                 GestureDetector(
@@ -108,15 +115,25 @@ class ChoosePaymentScreen extends StatelessWidget {
 
           const Spacer(),
 
-          // ✅ Confirm Button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
             child: GestureDetector(
-              onTap: () {
-                paymentVM.confirmPayment();
+              onTap: () async {
+                // Retrieve the order items from the OrderViewModel
+                final orderItems = Provider.of<OrderViewModel>(context, listen: false).orderItems;
+
+                // Confirm the payment with the selected total price and the orderItems
+                await paymentVM.confirmPayment(
+                  totalPrice: totalPrice,
+                  orderItems: orderItems, // Pass the order items here
+                );
+
+                // Based on the selected payment method, navigate to the appropriate screen
                 if (paymentVM.selectedMethod == PaymentMethod.cash) {
+                  // Navigate to the thank you screen
                   Navigator.pushNamed(context, '/thankYou');
                 } else if (paymentVM.selectedMethod == PaymentMethod.gcash) {
+                  // Navigate to the QR code screen
                   Navigator.pushNamed(context, '/qrCode');
                 }
               },
@@ -124,7 +141,7 @@ class ChoosePaymentScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 60,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF63FF6D), // ✅ Final color
+                  color: const Color(0xFF63FF6D),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(width: 2, color: Colors.black),
                 ),

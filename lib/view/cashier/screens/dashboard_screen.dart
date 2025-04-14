@@ -77,7 +77,7 @@ class DashboardScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 _navButton(context, 'Low Inventory Alert (Placeholder)', null),
                 const SizedBox(height: 20),
-                _navButton(context, 'Customer View (To be linked)', '/menu'),
+                _navButton(context, 'Customer View', '/menu'),
                 const SizedBox(height: 30),
                 _signOutButton(),
               ],

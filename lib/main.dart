@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sonofabean_combined/view/cashier/screens/thank_you_screen.dart';
+import 'package:sonofabean_combined/view/customer/screens/choose_payment_screen.dart';
+import 'package:sonofabean_combined/view/customer/screens/order_list_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // Cashier imports
+import 'view/cashier/screens/queue_screen.dart';
+import 'view/cashier/screens/confirm_payment_screen.dart';
 import 'view/cashier/screens/dashboard_screen.dart';
 import 'view_model/cashier/queue_view_model.dart';
 import 'view_model/cashier/transaction_view_model.dart';
-import 'view_model/cashier/payment_view_model.dart';
+import 'view_model/cashier/payment_view_model.dart'; // Cashier's
 
 // Customer imports
+import 'view/customer/screens/qr_code_screen.dart';
 import 'view/customer/screens/menu_screen.dart';
 import 'view_model/customer/menu_view_model.dart';
 import 'view_model/customer/order_view_model.dart';
-import 'view_model/customer/payment_view_model.dart';
+import 'view_model/customer/payment_view_model.dart' as customer; // ✅ Add alias here
 
-import 'view/cashier/screens/queue_screen.dart';
-
-import 'view/cashier/screens/confirm_payment_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +42,10 @@ class RootApp extends StatelessWidget {
         // Cashier providers
         ChangeNotifierProvider(create: (_) => QueueViewModel()),
         ChangeNotifierProvider(create: (_) => TransactionViewModel()),
+        ChangeNotifierProvider(create: (_) => PaymentViewModel()),
+
         // Customer providers
+        ChangeNotifierProvider(create: (_) => customer.PaymentViewModel()), // ✅ Added customer payment VM
         ChangeNotifierProvider(create: (_) => MenuViewModel()..fetchProducts()),
         ChangeNotifierProvider(create: (_) => OrderViewModel()),
       ],
@@ -62,6 +67,10 @@ class RootApp extends StatelessWidget {
               );
             case '/thankYou':
               return MaterialPageRoute(builder: (_) => const ThankYouScreen());
+            case '/orderList':
+              return MaterialPageRoute(builder: (_) => const OrderListScreen());
+            case '/qrCode':
+              return MaterialPageRoute(builder: (_) => const QrCodeScreen());
             default:
               return MaterialPageRoute(
                 builder: (_) => Scaffold(
