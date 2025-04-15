@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import '../widgets/hor_listitems.dart';
 import 'package:coffee_inventory_app/viewmodels/sale_record_vm.dart';
 import 'package:provider/provider.dart';
+import '../widgets/drop_down.dart';
 
 // class DashboardScreenNew extends StatelessWidget {
 //   const DashboardScreenNew({super.key});
@@ -190,90 +191,87 @@ class _DashboardScreenState extends State<DashboardScreen>{
       'Sat': 0.5,
       'Sun': 0.5,
     };
+    
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 231, 231, 233),
+      body: Consumer<SaleRecordViewModel>(
+        builder: (context, viewModel, child) {
+          weeklySales = viewModel.weeklySales;
 
-    return Consumer<SaleRecordViewModel>(
-      builder: (context, viewModel, child){
-        weeklySales = viewModel.weeklySales;
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Weekly Sales",
-                style: TextStyle(
-                  fontSize: 36
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DropDown(),
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 16),
+                        Text(
+                          "Weekly Sales",
+                          style: TextStyle(fontSize: 36),
+                        ),
+                        Container(
+                          height: 250,
+                          decoration: _glassBoxDecoration(),
+                          padding: const EdgeInsets.all(12),
+                          child: buildBarChart(weeklySales),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          "Daily Sales",
+                          style: TextStyle(fontSize: 36),
+                        ),
+                        Container(
+                          height: 55,
+                          width: 800,
+                          padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+                          decoration: _glassBoxDecoration(),
+                          child: Text(
+                            "10,000,000",
+                            style: TextStyle(fontSize: 30),
+                          ),
+                        ),
+                        SizedBox(height: 30),
+                        SizedBox(
+                          height: 200,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              ListItem.number(
+                                numToDisplay: viewModel.todayTotal.toInt().toString(),
+                                message: "Products\nSold Today",
+                              ),
+                              SizedBox(width: 15),
+                              ListItem.number(
+                                numToDisplay: viewModel.allTimeTotal.toInt().toString(),
+                                message: "Total\nProducts Sold",
+                              ),
+                              SizedBox(width: 15),
+                              ListItem.product(
+                                numToDisplay: viewModel.popularAmount,
+                                message: "Most\nPopular Product",
+                                prod_name: viewModel.popular,
+                              ),
+                              SizedBox(width: 15),
+                              ListItem.product(
+                                numToDisplay: viewModel.notPopularArmount,
+                                message: "Least\nPopular Product",
+                                prod_name: viewModel.notPopular,
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  )
                 ),
-              ),
-              Container(
-                height: 250,
-                decoration: _glassBoxDecoration(),
-                padding: const EdgeInsets.all(12),
-                child: buildBarChart(weeklySales),
-              ),
-              SizedBox(height:16),
-              Text(
-                "Daily Sales",
-                style:TextStyle(
-                  fontSize: 36
-                )
-              ),
-              Container(
-                height: 55,
-                width:800,
-                padding: EdgeInsets.fromLTRB(10,5, 0, 0),
-                decoration: _glassBoxDecoration(),
-                child: Text(
-                  "10,000,000",
-                  style: TextStyle(
-                    fontSize: 30
-                  ),
-                )
-              ),
-              SizedBox(height:30),
-              
-              SizedBox(
-                height:200,
-                child: ListView(
-                  
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    ListItem.number(
-                      numToDisplay: viewModel.todayTotal.toInt().toString(),
-                      message: "Products\nSold Today",
-                    ),
-                    SizedBox(width:15),
-
-                    ListItem.number(
-                      numToDisplay: viewModel.allTimeTotal.toInt().toString(),
-                      message: "Total\nProducts Sold",
-                    ),
-                    SizedBox(width:15),
-
-                    ListItem.product(
-                      numToDisplay: viewModel.popularAmount,
-                      message: "Most\nPopular Product",
-                      prod_name: viewModel.popular,
-                      
-                    ),
-                    SizedBox(width:15),
-                    ListItem.product(
-                      numToDisplay: viewModel.notPopularArmount,
-                      message: "Least\nPopular Product",
-            
-                      prod_name: viewModel.notPopular,
-                    )
-                  ],
-                )
-              )
-            ],
-          )
-        );
-      }
+              ],
+            ),
+          );
+        },
+      ),
     );
-    
-    
   }
 
   List<String> getChartDates(){
@@ -301,7 +299,7 @@ class _DashboardScreenState extends State<DashboardScreen>{
                 if (value % 20 == 0) {
                   return Text(
                     value.toInt().toString(),
-                    style: const TextStyle(color: Colors.white70, fontSize: 10),
+                    style: const TextStyle(color: Colors.black, fontSize: 10),
                   );
                 }
                 return const SizedBox.shrink();
@@ -320,7 +318,7 @@ class _DashboardScreenState extends State<DashboardScreen>{
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
                       days[index],
-                      style: const TextStyle(color: Colors.white70, fontSize: 12),
+                      style: const TextStyle(color: Colors.black, fontSize: 12),
                     ),
                   );
                 }
@@ -350,9 +348,9 @@ class _DashboardScreenState extends State<DashboardScreen>{
 
   BoxDecoration _glassBoxDecoration() {
     return BoxDecoration(
-      color: Colors.white.withOpacity(0.05),
+      color: Colors.white,
       borderRadius: BorderRadius.circular(20),
-      border: Border.all(color: Colors.white.withOpacity(0.1)),
+      border: Border.all(color: Colors.white),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.08),

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import '../models/inventory_item.dart';
-import '../models/sale_record.dart';
+import '../../../data/models/inventory_item.dart';
 import '../widgets/item_card.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../viewmodels/inventory_item_vm.dart';
+import '../../../viewmodels/inventory_item_vm.dart';
 import 'package:provider/provider.dart';
-
+import '../widgets/drop_down.dart';
+import 'edit_inventory_item.dart';
+import 'add_inventory_item.dart';
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
 
@@ -111,7 +112,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     name: nameController.text,
                     description: descController.text,
                     price: double.tryParse(priceController.text) ?? 0.0,
-                    // quantity: int.tryParse(quantityController.text) ?? 0,
+                    quantity: int.tryParse(quantityController.text) ?? 0,
                     imagePath: imagePath ?? '',
                   );
 
@@ -132,7 +133,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     final TextEditingController nameController = TextEditingController(text: item.name);
     final TextEditingController descController = TextEditingController(text: item.description);
     final TextEditingController priceController = TextEditingController(text: item.price.toString());
-    // final TextEditingController quantityController = TextEditingController(text: item.quantity.toString());
+    final TextEditingController quantityController = TextEditingController(text: item.quantity.toString());
     XFile? pickedImage;
 
     await showDialog(
@@ -197,8 +198,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     name: nameController.text,
                     description: descController.text,
                     price: double.tryParse(priceController.text) ?? 0.0,
-                    // quantity: int.tryParse(quantityController.text) ?? 0,
+                    quantity: int.tryParse(quantityController.text) ?? 0,
                     imagePath: imagePath ?? '',
+
                   );
 
                   viewModel.updateInventoryItem(updatedItem);
@@ -215,49 +217,99 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
-    return Column(
-      children: [
-        const SizedBox(height: 10),
-        ElevatedButton.icon(
-          onPressed: _addNewItem,
-          icon: const Icon(Icons.add),
-          label: const Text("Add New Item"),
-        ),
-        const SizedBox(height: 10),
-        Expanded(
-          child: Consumer<InvenItemViewModel>(
-            builder: (context, viewModel, child){
-              final items = viewModel.items;
-              if (items.isEmpty){
-                return const Center(child: Text("No items available"));
-              }
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 231, 231, 233),
+      body: Column(
+        children: [
+          DropDown(),
+          const SizedBox(height: 10),
           
-              return ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  final itemFromMap = InventoryItem.fromMap(item);
-                  // final remaining = _calculateRemaining(itemFromMap);
-                  return GestureDetector(
-                    onTap: () {
-                    },
-                    onLongPress: () {
-                      _showEditItemDialog(itemFromMap, index);
-                    },
-                    child: ItemCard(
-                      item: itemFromMap,
-                      onDelete: () async {
-                        await viewModel.deleteInventoryItem(itemFromMap.id!);
-                      }
+          // ElevatedButton.icon(
+          //   onPressed: _addNewItem,
+          //   icon: const Icon(Icons.add),
+          //   label: const Text("Add New Item"),
+          // ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left:16),
+                child:Text(
+                  "Inventory",
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)
+                )
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(right:16),
+                child:
+                TextButton(
+                  onPressed: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => InventoryAdd()));
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.all(Radius.circular(10))
                     ),
-                  );
-                },
-              );
-            }
-          )
-        ),
-      ],
+                    child: Center(
+                      
+                      child: FittedBox(
+                        child:Text(
+                          "+",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 50
+                          )
+                        )
+                      )
+                    )
+                  ),
+                )
+              )
+            ],
+          ),
+          
+          Container(
+            height:500,
+            child: Consumer<InvenItemViewModel>(
+              builder: (context, viewModel, child) {
+                final items = viewModel.items;
+                if (items.isEmpty) {
+                  return const Center(child: Text("No items available"));
+                }
+
+                return ListView.builder(
+                  padding: EdgeInsets.only(top:15),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    final itemFromMap = InventoryItem.fromMap(item);
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => InventoryView(item: InventoryItem.fromMap(item))));
+                      },
+                      child: ItemCard(
+                        item: itemFromMap,
+                        onDelete: () async {
+                          await viewModel.deleteInventoryItem(itemFromMap.id!);
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

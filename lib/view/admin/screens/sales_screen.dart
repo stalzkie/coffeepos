@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/sale_record.dart';
-import '../models/inventory_item.dart';
+import '../../../data/models/sale_record.dart';
+import '../../../data/models/inventory_item.dart';
 
 class SalesScreen extends StatefulWidget {
   const SalesScreen({super.key});

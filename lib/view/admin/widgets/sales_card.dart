@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/sale_record.dart';
+import '../../../data/models/sale_record.dart';
 import 'package:intl/intl.dart';
 
 class SalesCard extends StatelessWidget {

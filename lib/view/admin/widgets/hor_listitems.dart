@@ -23,9 +23,9 @@ class ListItem extends StatelessWidget{
 
   BoxDecoration _glassBoxDecoration() {
     return BoxDecoration(
-      color: Colors.white.withOpacity(0.05),
+      color: Colors.white,
       borderRadius: BorderRadius.circular(20),
-      border: Border.all(color: Colors.white.withOpacity(0.1)),
+      border: Border.all(color: Colors.white),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withOpacity(0.08),

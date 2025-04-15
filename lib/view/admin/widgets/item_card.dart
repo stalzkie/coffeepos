@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import '../models/inventory_item.dart';
+import '../../../data/models/inventory_item.dart';
 import 'package:coffee_inventory_app/viewmodels/inventory_item_vm.dart';
 import 'package:provider/provider.dart';
 
@@ -24,12 +24,12 @@ class ItemCard extends StatelessWidget {
       child: Consumer<InvenItemViewModel>(
         builder: (context, viewModel, child){
           return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            margin: const EdgeInsets.only(top:0, left:16, right:16, bottom:15),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.08),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withOpacity(0.15)),
+              border: Border.all(color: const Color.fromARGB(68, 75, 75, 75)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.05),
@@ -40,22 +40,6 @@ class ItemCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: hasImage
-                      ? Image.file(
-                          File(item.imagePath),
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.cover,
-                        )
-                      : Container(
-                          width: 60,
-                          height: 60,
-                          color: Colors.white12,
-                          child: const Icon(Icons.image_not_supported, color: Colors.white38),
-                        ),
-                ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -65,14 +49,14 @@ class ItemCard extends StatelessWidget {
                         item.name,
                         style: const TextStyle(
                           fontSize: 18,
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        item.description,
+                        "Quantity:${item.quantity}\t\tPrice:${item.price}",
                         style: const TextStyle(
-                          color: Colors.white70,
+                          color: Colors.black,
                           fontSize: 14,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -81,11 +65,6 @@ class ItemCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (onDelete != null)
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.redAccent),
-                    onPressed: onDelete,
-                  ),
               ],
             ),
           );

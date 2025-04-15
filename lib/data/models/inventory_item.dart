@@ -3,7 +3,9 @@ class InventoryItem{
   String name;
   String description;
   double price;
-  String imagePath; // Local path to the image
+  String imagePath;
+  String? date; // Local path to the image
+  int quantity;
 
   InventoryItem({
     this.id,
@@ -11,6 +13,8 @@ class InventoryItem{
     required this.description,
     required this.price,
     required this.imagePath,
+    required this.quantity,
+    this.date
   });
 
   factory InventoryItem.fromMap(Map<String, dynamic> map){
@@ -19,7 +23,9 @@ class InventoryItem{
       name: map['name'],
       description: map['description'],
       price: map['price'].toDouble(),
-      imagePath: (map['imagePath'] ?? '')
+      imagePath: map['image_url'],
+      quantity: map['quantity'],
+      date: map['created_at']
     );
   }
 
@@ -28,7 +34,9 @@ class InventoryItem{
       'name' : name,
       'description' : description,
       'price' : price,
-      'imagePath' : imagePath
+      'image_url' : imagePath,
+      'created_at' : date,
+      'quantity' : quantity
     };
   }
 }

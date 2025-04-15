@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../models/inventory_item.dart';
+import '../data/models/inventory_item.dart';
 
 class InvenItemViewModel extends ChangeNotifier{
   final _supabase = Supabase.instance.client;
@@ -49,5 +49,4 @@ class InvenItemViewModel extends ChangeNotifier{
       print("There was an error deleting an inventory item:$e");
     }
   }
-  
 }

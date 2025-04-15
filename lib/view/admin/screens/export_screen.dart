@@ -2,10 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
-import '../models/inventory_item.dart';
-import '../models/sale_record.dart';
-import '../viewmodels/inventory_item_vm.dart';
-import '../viewmodels/sale_record_vm.dart';
+import '../../../data/models/inventory_item.dart';
+import '../../../data/models/sale_record.dart';
+import '../../../viewmodels/inventory_item_vm.dart';
+import '../../../viewmodels/sale_record_vm.dart';
 import 'package:provider/provider.dart';
 
 class ExportScreen extends StatefulWidget {

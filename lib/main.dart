@@ -1,4 +1,11 @@
+import 'package:coffee_inventory_app/view/admin/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'view/admin/screens/home_page.dart';
+import 'data/models/inventory_item.dart';
+import 'data/models/sale_record.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:coffee_inventory_app/viewmodels/inventory_item_vm.dart';
+import 'viewmodels/sale_record_vm.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -23,8 +30,8 @@ import 'view/customer/screens/thank_you_screen.dart';
 import 'view/cashier/screens/dashboard_screen.dart';
 import 'view/cashier/screens/queue_screen.dart';
 import 'view/cashier/screens/confirm_payment_screen.dart';
-import 'view/cashier/screens/transaction_detail_screen.dart';
-import 'view/cashier/screens/cashier_thank_you_screen.dart';
+import 'view/admin/screens/inventory_screen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +58,8 @@ class SonofabeanApp extends StatelessWidget {
         // Customer
         ChangeNotifierProvider(create: (_) => MenuViewModel()..fetchProducts()),
         ChangeNotifierProvider(create: (_) => OrderViewModel()),
-        ChangeNotifierProvider(create: (_) => CustomerPaymentViewModel()),
+        ChangeNotifierProvider(create: (_) => InvenItemViewModel()),
+        ChangeNotifierProvider(create: (_) => SaleRecordViewModel())
       ],
       child: MaterialApp(
         title: 'Sonofabean Coffee App',
@@ -65,8 +73,13 @@ class SonofabeanApp extends StatelessWidget {
           switch (settings.name) {
             // Cashier routes
             case '/':
+              return MaterialPageRoute(builder: (_) => const SplashScreen());
+            case '/cashier':
               return MaterialPageRoute(builder: (_) => const DashboardScreen());
-
+            case '/inventory':
+              return MaterialPageRoute(builder: (_) => const InventoryScreen());
+            case '/menu':
+              return MaterialPageRoute(builder: (_) => const MenuScreen());
             case '/queue':
               return MaterialPageRoute(builder: (_) => const QueueScreen());
 
@@ -79,8 +92,8 @@ class SonofabeanApp extends StatelessWidget {
                 ),
               );
 
-            case '/cashier/thankYou':
-              return MaterialPageRoute(builder: (_) => const ThankYouScreen());
+            // case '/cashier/thankYou':
+            //   return MaterialPageRoute(builder: (_) => const ThankYouScreen());
 
             // Customer routes
             case '/menu':
