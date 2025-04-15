@@ -1,0 +1,41 @@
+name: coffee_inventory_app
+description: A modern, offline coffee shop inventory and sales tracker app.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  provider: ^6.1.1
+  supabase_flutter: ^2.8.4
+  intl: ^0.20.2
+  cached_network_image: ^3.3.1
+  flutter_dotenv: ^5.1.0
+  image_picker: ^1.0.4
+  google_fonts: ^6.1.0
+  path_provider: ^2.1.5
+  csv: ^6.0.0
+  fluttertoast: ^8.2.12
+  fl_chart: ^0.70.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  fonts:
+    - family: Figtree
+      fonts:
+        - asset: assets/fonts/Figtree-Regular.ttf
+        - asset: assets/fonts/Figtree-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Figtree-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Figtree-Light.ttf
+          weight: 300
