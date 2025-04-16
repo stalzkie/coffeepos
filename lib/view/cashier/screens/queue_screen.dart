@@ -43,7 +43,7 @@ class _QueueScreenState extends State<QueueScreen> {
               ),
             ),
             child: const Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               child: Text(
                 'sonofabean.',
                 style: TextStyle(
