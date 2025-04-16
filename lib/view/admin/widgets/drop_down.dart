@@ -110,10 +110,10 @@ class _DropDownState extends State<DropDown>{
         ),
       );
     }else{
-      List<String> buttonTexts = ["Inventory", "Sales", "Export CSV", "User Registration", "Products", "Sign Out"];
-      List<String?> routes = ["/inventory", null, null, null, null, null];
+      List<String> buttonTexts = ["Inventory", "Sales", "Export CSV", "User Registration", "Dashboard" , "Sign Out"];
+      List<String?> routes = ["/inventory", "/transactions", null, "/users", "/dash" , "/"];
       return Container(
-        height: 550,
+        height: 525,
         width: double.infinity,
         padding:EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -172,10 +172,12 @@ class _DropDownState extends State<DropDown>{
                   ],
                 ),
               ),
+              SizedBox(height:16),
               SizedBox(
                 height: 350,
                 width: 230,
                 child:ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: routes.length,
                   itemBuilder: (context, index){
                     return Padding(

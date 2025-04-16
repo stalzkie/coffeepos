@@ -17,6 +17,17 @@ Future<List<TransactionModel>> fetchAllTransactions() async {
       .toList();
 }
 
+Future<List<TransactionModel>> fetchTransactionsNoFilter() async {
+  final response = await _client
+      .from('transactions')
+      .select()
+      .order('created_at', ascending: false);
+
+  return (response as List)
+      .map((json) => TransactionModel.fromJson(json))
+      .toList();
+}
+
   // Search transactions by ID for unpaid ones
   Future<List<TransactionModel>> searchTransactions(String query) async {
     final response = await _client

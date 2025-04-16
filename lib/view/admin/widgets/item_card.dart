@@ -18,7 +18,6 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasImage = item.imagePath.isNotEmpty && File(item.imagePath).existsSync();
     return GestureDetector(
       onTap: onTap,
       child: Consumer<InvenItemViewModel>(

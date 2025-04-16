@@ -1,7 +1,6 @@
-import 'package:coffee_inventory_app/view/admin/screens/dashboard_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'home_page.dart';
 
 
 class SplashScreen extends StatefulWidget{
@@ -211,8 +210,6 @@ class _SplashScreenState extends State<SplashScreen>{
                               children: [
                                 Container(
                                   width: 115,
-     
-                                  padding: const EdgeInsets.all(10),
                                   clipBehavior: Clip.antiAlias,
                                   decoration: ShapeDecoration(
                                     color: Colors.white,
@@ -224,24 +221,22 @@ class _SplashScreenState extends State<SplashScreen>{
                                       borderRadius: BorderRadius.circular(30),
                                     ),
                                   ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    spacing: 10,
-                                    children: [
-                                      Text(
-                                        'Customer',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: const Color(0xFF1E1E1E),
-                                          fontSize: 14,
-                                          fontFamily: 'Figtree',
-                                          fontWeight: FontWeight.w500,
+                                  child: TextButton(
+                                        onPressed: (){
+                                          Navigator.pushNamed(context, "/menu");
+                                        },
+
+                                        style: ElevatedButton.styleFrom(
+                                          textStyle: TextStyle(fontSize: 14),
+                                          backgroundColor: Colors.white,
                                         ),
+
+                                        child: const Text("Customer",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                          )
+                                        )
                                       ),
-                                    ],
-                                  ),
                                 ),
                                 Container(
                                   width: 115,           
@@ -556,8 +551,8 @@ class _SplashScreenState extends State<SplashScreen>{
                                                 );
 
                                                 if(res.user != null){
-                                                  Navigator.push(
-                                                    context, MaterialPageRoute(builder: (context) => DashboardScreen())
+                                                  Navigator.pushNamed(
+                                                    context, "/dash"
                                                   );
                                                 }
                                               },

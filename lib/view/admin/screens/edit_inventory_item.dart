@@ -3,20 +3,24 @@ import '../../../data/models/inventory_item.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/inventory_item_vm.dart';
 
-class InventoryView extends StatefulWidget{
-    final InventoryItem item;
-    const InventoryView({
-        super.key,
-        required this.item
-    });
+class InventoryEdit extends StatefulWidget {
+  final InventoryItem item;
+  const InventoryEdit({
+      super.key,
+      required this.item
+  });
 
-    State<InventoryView> createState() => _InventoryViewState();
+  @override
+  State<InventoryEdit> createState() => _InventoryEditState();
 }
 
-class _InventoryViewState extends State<InventoryView>{
+class _InventoryEditState extends State<InventoryEdit> {
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  
   late InventoryItem _item;
   late InvenItemViewModel _item_vm;
-
   @override
   void initState(){
     super.initState();
@@ -27,363 +31,187 @@ class _InventoryViewState extends State<InventoryView>{
   }
 
   @override
+  void dispose() {
+    _quantityController.dispose();
+    _priceController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  void _saveItem() {
+    final quantity = int.tryParse(_quantityController.text) ?? 0;
+    final price = double.tryParse(_priceController.text) ?? 0.0;
+    final description = _descriptionController.text;
+
+    final newItem = InventoryItem(
+      id: _item.id,
+      name: _item.name,
+      quantity: quantity,
+      price: price,
+      imagePath: _item.imagePath,
+      description: description,
+    );
+
+    _item_vm.updateInventoryItem(newItem);    
+
+    setState((){
+      _item.id = newItem.id;
+      _item.name = newItem.name;
+      _item.quantity = newItem.quantity;
+      _item.price = newItem.price;
+      _item.imagePath = newItem.imagePath;
+      _item.description = newItem.description;
+    });
+    Navigator.pushNamed(context, '/inventory');
+  }
+
+  void _cancel() {
+    Navigator.pop(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
-      child: Column(
-        children: [
-          Container(
-            width: 393,
-            height: 852,
-            decoration: BoxDecoration(
-              color: const Color(0xFFE7E7E9),
+      child: Container(
+        width: 393,
+        height: 890,
+        decoration: const BoxDecoration(
+          color: Color(0xFFE7E7E9),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              left: 0,
+              top: -250,
+              child: Container(
+                width: 393,
+                height: 852,
+                child: Image.network(
+                  (_item.imagePath != null ? _item.imagePath : "")!
+                ),
+              ),
             ),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 0,
-                  top: -220,
-                  child: Container(
-                    width: 393,
-                    height: 852,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(),
-                    child: Image.network(_item.imagePath),
+            Positioned(
+              left: 0,
+              top: 364,
+              child: Container(
+                width: 393,
+                height: 520,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                decoration: const ShapeDecoration(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(50),
+                      topRight: Radius.circular(50),
+                    ),
                   ),
                 ),
-                Positioned(
-                  left: 0,
-                  top: 364,
-                  child: Container(
-                    width: 393,
-                    height: 550,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                    clipBehavior: Clip.antiAlias,
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(50),
-                          topRight: Radius.circular(50),
-                        ),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 10,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Name and Back button
+                    Row(
                       children: [
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(10),
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 10,
-                            children: [
-                              SizedBox(
-                                width: 285,
-                                height: 36,
-                                child: Text(
-                                  'Inventory Name',
-                                  style: TextStyle(
-                                    color: const Color(0xFF1E1E1E),
-                                    fontSize: 24,
-                                    fontFamily: 'Figtree',
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: 36,
-                                height: 36,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: ShapeDecoration(
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      width: 2,
-                                      strokeAlign: BorderSide.strokeAlignOutside,
-                                      color: Colors.black.withValues(alpha: 128),
-                                    ),
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.zero,
-                                        minimumSize: Size.zero,
-                                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                        visualDensity: VisualDensity.compact,
-                                      ),
-                                      child: Text("<", style: TextStyle(fontSize: 20)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                        SizedBox(
+                          width: 285,
+                          height: 36,
+                          child: Text(
+                            _item.name,
+                            style: TextStyle(
+                              color: const Color(0xFF1E1E1E),
+                              fontSize: 24,
+                              fontFamily: 'Figtree',
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                        Container(
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 10,
-                            children: [
-                              Container(
-                                width: 165,
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  spacing: 10,
-                                  children: [
-                                    SizedBox(
-                                      width: 77,
-                                      child: Text(
-                                        'Quantity:',
-                                        style: TextStyle(
-                                          color: const Color(0x7F1E1E1E),
-                                          fontSize: 16,
-                                          fontFamily: 'Figtree',
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 67,
-                                      child: Text(
-                                        _item.quantity.toString(),
-                                        style: TextStyle(
-                                          color: const Color(0xFF1E1E1E),
-                                          fontSize: 16,
-                                          fontFamily: 'Figtree',
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: 178,
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  spacing: 10,
-                                  children: [
-                                    SizedBox(
-                                      width: 43,
-                                      child: Text(
-                                        'Price:',
-                                        style: TextStyle(
-                                          color: const Color(0x7F1E1E1E),
-                                          fontSize: 16,
-                                          fontFamily: 'Figtree',
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 115,
-                                      child: Text(
-                                        _item.price.toString(),
-                                        style: TextStyle(
-                                          color: const Color(0xFF1E1E1E),
-                                          fontSize: 16,
-                                          fontFamily: 'Figtree',
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.arrow_back),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+
+                    // Quantity and Price
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _quantityController,
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Quantity",
+                            ),
                           ),
                         ),
-                        Container(
-                          width: double.infinity,
-                          height: 240,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 10,
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  spacing: 10,
-                                  children: [
-                                    SizedBox(
-                                      width: 90,
-                                      child: Text(
-                                        'Description',
-                                        style: TextStyle(
-                                          color: const Color(0x7F1E1E1E),
-                                          fontSize: 16,
-                                          fontFamily: 'Figtree',
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: double.infinity,
-                                height: 150,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  spacing: 10,
-                                  children: [
-                                    SizedBox(
-                                      width: 333,
-                                      height: 139,
-                                      child: Text(
-                                        _item.description,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontFamily: 'Figtree',
-                                          fontWeight: FontWeight.w300,
-                                          letterSpacing: 0.39,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(10),
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            spacing: 10,
-                            children: [
-                              Container(
-                                width: 115,
-                                height: 38,
-                                padding: const EdgeInsets.all(10),
-                                clipBehavior: Clip.antiAlias,
-                                decoration: ShapeDecoration(
-                                  color: const Color(0xFFFF3838),
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      width: 2,
-                                      strokeAlign: BorderSide.strokeAlignOutside,
-                                    ),
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  spacing: 10,
-                                  children: [
-                                    TextButton(
-                                      onPressed:(){
-                                        _item_vm.deleteInventoryItem(_item.id!);
-                                      },
-                                      child:Text(
-                                        'Delete',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: const Color(0xFF1E1E1E),
-                                          fontSize: 14,
-                                          fontFamily: 'Figtree',
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: 115,
-                                height: 38,
-                                padding: const EdgeInsets.all(10),
-                                clipBehavior: Clip.antiAlias,
-                                decoration: ShapeDecoration(
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      width: 2,
-                                      strokeAlign: BorderSide.strokeAlignOutside,
-                                    ),
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  spacing: 10,
-                                  children: [
-                                    Text(
-                                      'Edit',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: const Color(0xFF1E1E1E),
-                                        fontSize: 14,
-                                        fontFamily: 'Figtree',
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: TextField(
+                            controller: _priceController,
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Price",
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 10),
+
+                    // Description
+                    const Text(
+                      'Description',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 5),
+                    TextField(
+                      controller: _descriptionController,
+                      maxLines: 5,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "Enter description",
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Buttons
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          onPressed: _cancel,
+                          child: const Text('Cancel'),
+                        ),
+                        const SizedBox(width: 20),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.greenAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          onPressed: _saveItem,
+                          child: const Text('Save'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
-      )
+          ],
+        ),
+      ),
     );
-    
-    
   }
 }

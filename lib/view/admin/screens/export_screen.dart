@@ -23,8 +23,8 @@ class _MyExportScreenState extends State<ExportScreen>{
   void initState(){
     super.initState();
     Future.microtask(() {
-      inventory_vm = Provider.of<InvenItemViewModel>(context, listen: false);
-      sales_vm = Provider.of<SaleRecordViewModel>(context, listen:false);
+      inventory_vm = context.read<InvenItemViewModel>();
+      sales_vm = context.read<SaleRecordViewModel>();
 
       inventory_vm.getInventoryItems();
       sales_vm.getSalesOrders();

@@ -3,7 +3,7 @@ class InventoryItem{
   String name;
   String description;
   double price;
-  String imagePath;
+  String? imagePath;
   String? date; // Local path to the image
   int quantity;
 
@@ -12,7 +12,7 @@ class InventoryItem{
     required this.name,
     required this.description,
     required this.price,
-    required this.imagePath,
+    this.imagePath,
     required this.quantity,
     this.date
   });
@@ -35,7 +35,17 @@ class InventoryItem{
       'description' : description,
       'price' : price,
       'image_url' : imagePath,
-      'created_at' : date,
+      'created_at' : date!,
+      'quantity' : quantity
+    };
+  }
+
+  Map<String, dynamic> noDateMap(){
+    return {
+      'name' : name,
+      'description' : description,
+      'price' : price,
+      'image_url' : imagePath,
       'quantity' : quantity
     };
   }

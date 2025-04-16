@@ -156,15 +156,15 @@ import '../widgets/drop_down.dart';
 //   }
 // }
 
-class DashboardScreen extends StatefulWidget{
-  const DashboardScreen({super.key});
+class Dashboard extends StatefulWidget{
+  const Dashboard({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<Dashboard> createState() => _DashboardScreenState();
 }
 
 
-class _DashboardScreenState extends State<DashboardScreen>{
+class _DashboardScreenState extends State<Dashboard>{
   
   @override
   void initState(){
