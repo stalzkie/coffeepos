@@ -28,6 +28,10 @@ class _InventoryEditState extends State<InventoryEdit> {
     Future.microtask((){
       _item_vm = context.read<InvenItemViewModel>();
     });
+
+    _quantityController.text = _item.quantity.toString();
+    _priceController.text = _item.price.toString();
+    _descriptionController.text = _item.description;
   }
 
   @override
@@ -62,7 +66,7 @@ class _InventoryEditState extends State<InventoryEdit> {
       _item.imagePath = newItem.imagePath;
       _item.description = newItem.description;
     });
-    Navigator.pushNamed(context, '/inventory');
+    Navigator.popAndPushNamed(context, '/inventory');
   }
 
   void _cancel() {

@@ -3,6 +3,7 @@ import '../widgets/drop_down.dart';
 import '../../../data/repositories/transaction_repository.dart';
 import '../../../data/models/cashier_transaction_model.dart';
 import '../../../data/models/cashier_order_item_model.dart';
+import 'transaction_view.dart';
 
 
 class TransactionScreen extends StatefulWidget{
@@ -78,31 +79,38 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 itemCount: _transactions.length, // Replace with your real data
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 6),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Transaction ID: ${_transactions[index].id}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            )),
-                        SizedBox(height: 4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  return GestureDetector(
+                    onTap: (){
+                      // redirect to transact details
+                      Navigator.push(context, 
+                      MaterialPageRoute(builder: (_) => TransactionView(transaction: _transactions[index])));
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Price: ${_transactions[index].totalPrice}"),
-                            Text("Date: ${_transactions[index].createdAt}"),
+                            Text("Transaction ID: ${_transactions[index].id}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                )),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Price: ${_transactions[index].totalPrice}"),
+                                Text("Date: ${_transactions[index].createdAt}"),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                    )
                   );
                 },
               ),

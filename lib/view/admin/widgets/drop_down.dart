@@ -111,7 +111,7 @@ class _DropDownState extends State<DropDown>{
       );
     }else{
       List<String> buttonTexts = ["Inventory", "Sales", "Export CSV", "User Registration", "Dashboard" , "Sign Out"];
-      List<String?> routes = ["/inventory", "/transactions", null, "/users", "/dash" , "/"];
+      List<String?> routes = ["/inventory", "/transactions", '/export', "/users", "/dash" , "/"];
       return Container(
         height: 525,
         width: double.infinity,

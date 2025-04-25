@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../data/models/inventory_item.dart';
 import 'package:provider/provider.dart';
 import '../../../viewmodels/inventory_item_vm.dart';
-import 'edit_inventory_item.dart';
+import 'inventory_item_edit.dart';
 
 class InventoryView extends StatefulWidget{
     final InventoryItem item;
@@ -49,7 +49,7 @@ class _InventoryViewState extends State<InventoryView>{
                     height: 852,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(),
-                    child: Image.network((_item.imagePath != null ? _item.imagePath : "")!),
+                    child: Image.network((_item.imagePath ?? "https://www.coffeebeans.ph/storage/2023/02/arabica-1-2.jpg")!),
                   ),
                 ),
                 Positioned(

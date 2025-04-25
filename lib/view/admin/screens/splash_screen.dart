@@ -1,6 +1,9 @@
 
+import 'package:coffee_inventory_app/view/admin/screens/user_view.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../../viewmodels/user_vm.dart';
+import 'package:provider/provider.dart';
 
 
 class SplashScreen extends StatefulWidget{
@@ -10,11 +13,15 @@ class SplashScreen extends StatefulWidget{
 
 class _SplashScreenState extends State<SplashScreen>{
   final _supabase = Supabase.instance.client;
+  late UserViewModel _userVM;
   bool _startedPressed = false;
   bool _loggingIn = false;
   
   void initState(){
     super.initState();
+    Future.microtask((){
+      _userVM = context.read<UserViewModel>();
+    });
   }
 
   @override
@@ -23,6 +30,7 @@ class _SplashScreenState extends State<SplashScreen>{
     final TextEditingController _passwordController = TextEditingController();
     if(!_startedPressed){
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Center(
           child: Container(
             decoration: BoxDecoration(color: const Color(0xFFF2F2F2)),

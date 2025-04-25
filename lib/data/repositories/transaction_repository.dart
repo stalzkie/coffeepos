@@ -21,6 +21,7 @@ Future<List<TransactionModel>> fetchTransactionsNoFilter() async {
   final response = await _client
       .from('transactions')
       .select()
+      .eq('status', 'paid')
       .order('created_at', ascending: false);
 
   return (response as List)

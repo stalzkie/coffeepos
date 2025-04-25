@@ -118,10 +118,16 @@ class SaleRecordViewModel extends ChangeNotifier{
     notifyListeners();
 
     try{
-      _orders = await _supabase.from("SalesRecords");
+      _orders = await _supabase.from("order_items")
+      .select("""
+        *,
+        transactions(created_at),
+        products(name, description)
+      """);
+      print(_orders);
       notifyListeners();
     }catch (e){
-      print("error trying to fetch data");
+      print('error trying to fetch data:$e');
     }
 
     _isLoading = false;

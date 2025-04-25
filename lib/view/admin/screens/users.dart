@@ -4,6 +4,8 @@ import '../widgets/drop_down.dart';
 import '../../../data/models/user_model.dart';
 import '../../../viewmodels/user_vm.dart';
 import 'package:provider/provider.dart';
+import 'user_view.dart';
+import 'users_alter.dart';
 
 class UserListScreen extends StatefulWidget{
   const UserListScreen({super.key});
@@ -29,6 +31,12 @@ class _UserListScreenState extends State<UserListScreen> {
     });
   }
 
+  String formatDateCreated(DateTime date){
+    List<String> months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+    return '${date.day} ${months[date.month-1]}, ${date.year}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,16 +44,19 @@ class _UserListScreenState extends State<UserListScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Top Header
             DropDown(),
 
-            // Add User Button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => UsersAlter())
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.greenAccent,
                     foregroundColor: Colors.black,
@@ -57,7 +68,6 @@ class _UserListScreenState extends State<UserListScreen> {
               ),
             ),
 
-            // Registered Users Title
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Align(
@@ -69,7 +79,6 @@ class _UserListScreenState extends State<UserListScreen> {
               ),
             ),
 
-            // User Cards
             Consumer<UserViewModel>(
               builder: (context, viewModel, child){
                 final users = viewModel.users;
@@ -85,29 +94,40 @@ class _UserListScreenState extends State<UserListScreen> {
                       return Padding(
                         padding:
                             const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(user['email']!,
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => UserView(currentUser: UserModel.fromMap(users[index])))
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(user['email']!,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 16)),
-                              const SizedBox(height: 4),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Role: admin"),
-                                  Text("Date Created: ${DateTime.parse(user["created_at"])}"),
-                                ],
-                              )
-                            ],
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16
+                                  )
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Role: ${user['role']}"),
+                                    Text("Date Created: ${formatDateCreated(DateTime.parse(user["created_at"]) )}"),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
-                        ),
+                        )
                       );
                     },
                   ),

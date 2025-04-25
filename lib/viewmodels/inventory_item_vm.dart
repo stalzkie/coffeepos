@@ -35,6 +35,19 @@ class InvenItemViewModel extends ChangeNotifier{
     }
   }
 
+  Future<Map<String, dynamic>?> getLowInventoryItems() async{
+    try{
+      return await _supabase.from('products')
+      .select()
+      .lte('quantity', 10)
+      .order('quantity', ascending: true)
+      .single();
+    }catch (e){
+      print("error getting low inventory:$e");
+      return null;
+    }
+  }
+
   Future<void> updateInventoryItem(InventoryItem item) async{
     try{
       await _supabase.from("products").update(item.noDateMap()).eq("id", item.id!);

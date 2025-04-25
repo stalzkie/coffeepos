@@ -164,7 +164,12 @@ class _InventoryAddState extends State<InventoryAdd> {
                             ),
                           ),
                           onPressed: _cancel,
-                          child: const Text('Cancel'),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(
+                              color: Colors.white
+                            )
+                          ),
                         ),
                         const SizedBox(width: 20),
                         ElevatedButton(

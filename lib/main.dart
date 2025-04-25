@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'data/models/inventory_item.dart';
-import 'data/models/sale_record.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:coffee_inventory_app/viewmodels/inventory_item_vm.dart';
 import 'viewmodels/sale_record_vm.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 // ViewModels - Cashier
 import 'view_model/cashier/queue_view_model.dart';
@@ -15,7 +12,6 @@ import 'view_model/cashier/payment_view_model.dart';
 // ViewModels - Customer
 import 'view_model/customer/menu_view_model.dart';
 import 'view_model/customer/order_view_model.dart';
-import 'view_model/customer/payment_view_model.dart';
 
 // Screens - Customer
 import 'view/customer/screens/menu_screen.dart';
@@ -30,12 +26,13 @@ import 'view/cashier/screens/queue_screen.dart';
 import 'view/cashier/screens/confirm_payment_screen.dart';
 import 'view/admin/screens/inventory_screen.dart';
 
-// Screens - Admin
+// Admin
 import 'view/admin/screens/splash_screen.dart';
 import 'view/admin/screens/dashboard_screen.dart';
 import 'view/admin/screens/transactions.dart';
-import 'view/admin/screens/user_reg.dart';
+import 'view/admin/screens/users.dart';
 import 'viewmodels/user_vm.dart';
+import 'view/admin/screens/export_screen.dart';
 
 
 void main() async {
@@ -102,7 +99,8 @@ class SonofabeanApp extends StatelessWidget {
                   totalPrice: args['totalPrice'],
                 ),
               );
-
+            case '/export':
+              return MaterialPageRoute(builder: (_) => ExportScreen());
             // case '/cashier/thankYou':
             //   return MaterialPageRoute(builder: (_) => const ThankYouScreen());
 
