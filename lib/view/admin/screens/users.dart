@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../widgets/drop_down.dart';
 import '../../../data/models/user_model.dart';
 import '../../../viewmodels/user_vm.dart';
@@ -93,7 +92,7 @@ class _UserListScreenState extends State<UserListScreen> {
                       child: TextField(
                         controller: search,
                         decoration: const InputDecoration(
-                          hintText: "Search transaction...",
+                          hintText: "Search users...",
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.symmetric(horizontal: 10),
                         ),
@@ -115,61 +114,61 @@ class _UserListScreenState extends State<UserListScreen> {
 
             
             Consumer<UserViewModel>(
-  builder: (context, viewModel, child) {
-    if (users.isEmpty) {
-      return const Center(child: Text("No items available"));
-    }
+              builder: (context, viewModel, child) {
+                if (users.isEmpty) {
+                  return const Center(child: Text("No items available"));
+                }
 
-    return Column(
-      children: users.map((user) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => UserView(
-                    currentUser: UserModel.fromMap(user),
-                  ),
-                ),
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user['email']!,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Role: ${user['role']}"),
-                      Text(
-                        "Date Created: ${formatDateCreated(DateTime.parse(user["created_at"]))}",
+                return Column(
+                  children: users.map((user) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => UserView(
+                                currentUser: UserModel.fromMap(user),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                user['email']!,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Role: ${user['role']}"),
+                                  Text(
+                                    "Date Created: ${formatDateCreated(DateTime.parse(user["created_at"]))}",
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  },
-)
+                    );
+                  }).toList(),
+                );
+              },
+            )
           ],
         ),
       )
