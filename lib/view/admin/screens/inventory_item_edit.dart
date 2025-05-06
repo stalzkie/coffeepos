@@ -75,147 +75,149 @@ class _InventoryEditState extends State<InventoryEdit> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        width: 393,
-        height: 890,
-        decoration: const BoxDecoration(
-          color: Color(0xFFE7E7E9),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              left: 0,
-              top: -250,
-              child: Container(
-                width: 393,
-                height: 852,
-                child: Image.network(
-                  (_item.imagePath != null ? _item.imagePath : "")!
-                ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              top: 364,
-              child: Container(
-                width: 393,
-                height: 520,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                decoration: const ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50),
-                    ),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          width: 393,
+          height: 880,
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 255, 255, 255),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                left: 0,
+                top: -250,
+                child: Container(
+                  width: 393,
+                  height: 852,
+                  child: Image.network(
+                    (_item.imagePath != null ? _item.imagePath : "")!
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Name and Back button
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 285,
-                          height: 36,
-                          child: Text(
-                            _item.name,
-                            style: TextStyle(
-                              color: const Color(0xFF1E1E1E),
-                              fontSize: 24,
-                              fontFamily: 'Figtree',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: const Icon(Icons.arrow_back),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-
-                    // Quantity and Price
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _quantityController,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: "Quantity",
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: TextField(
-                            controller: _priceController,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: "Price",
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-
-                    // Description
-                    const Text(
-                      'Description',
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 5),
-                    TextField(
-                      controller: _descriptionController,
-                      maxLines: 5,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Enter description",
+              ),
+              Positioned(
+                left: 0,
+                top: 364,
+                child: Container(
+                  width: 393,
+                  height: 530,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                  decoration: const ShapeDecoration(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(50),
+                        topRight: Radius.circular(50),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Name and Back button
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 285,
+                            height: 36,
+                            child: Text(
+                              _item.name,
+                              style: TextStyle(
+                                color: const Color(0xFF1E1E1E),
+                                fontSize: 24,
+                                fontFamily: 'Figtree',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () => Navigator.pop(context),
+                            icon: const Icon(Icons.arrow_back),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
 
-                    // Buttons
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+                      // Quantity and Price
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _quantityController,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Quantity",
+                              ),
                             ),
                           ),
-                          onPressed: _cancel,
-                          child: const Text('Cancel'),
-                        ),
-                        const SizedBox(width: 20),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.greenAccent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: TextField(
+                              controller: _priceController,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: "Price",
+                              ),
                             ),
                           ),
-                          onPressed: _saveItem,
-                          child: const Text('Save'),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+
+                      // Description
+                      const Text(
+                        'Description',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 5),
+                      TextField(
+                        controller: _descriptionController,
+                        maxLines: 5,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: "Enter description",
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Buttons
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.redAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            onPressed: _cancel,
+                            child: const Text('Cancel'),
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.greenAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            onPressed: _saveItem,
+                            child: const Text('Save'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+      )    
     );
   }
 }

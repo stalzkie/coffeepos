@@ -110,6 +110,7 @@ class _UsersAlterState extends State<UsersAlter>{
         'created_at' : _currentUser!.created_at
       };
       await _userVM.updateUser(userData);
+      Navigator.popAndPushNamed(context, '/users');
     }
   }
 
@@ -124,173 +125,155 @@ class _UsersAlterState extends State<UsersAlter>{
   }
 
   @override 
-  Widget build(BuildContext context){
-    if(_currentUser != null){
-      _contactController.text = _currentUser!.contact_no;
-      _nameController.text = _currentUser!.full_name;
-      _emailController.text = _currentUser!.email;
-    }
-    return Scaffold(
-      backgroundColor: Color.fromARGB(253, 231, 231, 233),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 100,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top:Radius.circular(50))
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 12,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: const Icon(
-                              Icons.account_circle_outlined,
-                              size: 120,
-                            ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 1, color: Colors.black),
-                            borderRadius: BorderRadius.circular(100)
-                          ),
-                          child:IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: const Icon(Icons.arrow_back),
-                          )
-                        ),
-                      ],
-                    ),
-                    Text(
-                      "Full Name",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold
-                      )
-                    ),
-                    SizedBox(
-                      height:40,
-                      width: 330,
-                      child: TextFormField(
-                        controller: _nameController,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(left:5),
-                          border: OutlineInputBorder(),
-                        )
-                      )
-                    ),
-                    Text(
-                      "Email",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold
-                      )
-                    ),
-                    SizedBox(
-                      height:40,
-                      width: 330,
-                      child: TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(left:5),
-                          border: OutlineInputBorder(),
-                        )
-                      )
-                    ),
-                    Text(
-                      "Role",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold
-                      )
-                    ),
-                    DropdownButton<String>(
-                      // focusColor: Colors.black,
-                      // dropdownColor: const Color.fromARGB(255, 20, 20, 20),
-                      value: role,
-                      hint: Text('Select role'),
-                      onChanged: (value) {
-                        setState(() {
-                          role = value!;
-                        });
-                      },
-                      items: ['Admin', 'Cashier']
-                          .map((role) => DropdownMenuItem(
-                                value: role,
-                                child: Text(role),
-                              ))
-                          .toList(),
-                    ),
-                    Text(
-                      "Contact No.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold
-                      )
-                    ),
-                    SizedBox(
-                      height:40,
-                      width: 330,
-                      child: TextFormField(
-                        controller: _contactController,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(left:5),
-                          border: OutlineInputBorder(),
-                        )
-                      )
-                    ),
-                    SizedBox(height: 30,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width:100,
-                          child: TextButton(
-                            onPressed: (){
-                              Navigator.pop(context);
-                            },
-                            style: TextButton.styleFrom(
-                              side: BorderSide(color: Colors.black, width: 1),
-                              backgroundColor: Colors.red,
-                            ),
-                            
-                            child: Text("Cancel", style: TextStyle(color:Colors.white))
-                          )
-                        ),
-                        SizedBox(width: 30,),
-                        SizedBox(
-                          width:100,
-                          child: TextButton(
-                            onPressed: _handleGreenEvent,
-                            style: TextButton.styleFrom(
-                              side: BorderSide(color: Colors.black, width: 1),
-                              backgroundColor: Colors.green[400],
-                            ),
-                            
-                            child: Text("Save", style: TextStyle(color:Colors.white))
-                          )
-                        ),
-                      ],
-                    )
-                  ],
-                )
-              )
-            )
-          )
-        ],
-      ),
-    );
+  Widget build(BuildContext context) {
+  if (_currentUser != null) {
+    _contactController.text = _currentUser!.contact_no;
+    _nameController.text = _currentUser!.full_name;
+    _emailController.text = _currentUser!.email;
   }
+
+  return Scaffold(
+    backgroundColor: const Color.fromARGB(253, 231, 231, 233),
+    body: SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 30),
+        child: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(50)),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.account_circle_outlined,
+                    size: 120,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.black),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.arrow_back),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Full Name",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 40,
+                width: 330,
+                child: TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.only(left: 5),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Email",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 40,
+                width: 330,
+                child: TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.only(left: 5),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Role",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              DropdownButton<String>(
+                value: role,
+                hint: const Text('Select role'),
+                onChanged: (value) {
+                  setState(() {
+                    role = value!;
+                  });
+                },
+                items: ['Admin', 'Cashier']
+                    .map((role) => DropdownMenuItem(
+                          value: role,
+                          child: Text(role),
+                        ))
+                    .toList(),
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                "Contact No.",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 40,
+                width: 330,
+                child: TextFormField(
+                  controller: _contactController,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.only(left: 5),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 100,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: TextButton.styleFrom(
+                        side: const BorderSide(color: Colors.black, width: 1),
+                        backgroundColor: Colors.red,
+                      ),
+                      child:
+                          const Text("Cancel", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(width: 30),
+                  SizedBox(
+                    width: 100,
+                    child: TextButton(
+                      onPressed: _handleGreenEvent,
+                      style: TextButton.styleFrom(
+                        side: const BorderSide(color: Colors.black, width: 1),
+                        backgroundColor: Colors.green,
+                      ),
+                      child:
+                          const Text("Save", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
 }

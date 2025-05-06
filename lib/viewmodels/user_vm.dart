@@ -54,4 +54,17 @@ class UserViewModel extends ChangeNotifier{
       print("delete failed: ${res.data}");
     }
   }
+
+  Future<List<Map<String, dynamic>>> searchUsersByEmail(String email) async {
+    try{
+      final response = await _supabase.from("profiles")
+        .select()
+        .ilike('email', '%$email%');
+
+      return response;
+    }catch(e){
+      print(e);
+      return [];
+    }
+  }
 }

@@ -15,15 +15,16 @@ class UserListScreen extends StatefulWidget{
 }
 
 class _UserListScreenState extends State<UserListScreen> {
-  final _supabase = Supabase.instance.client;
+  final TextEditingController search = TextEditingController();
   late List<Map<String,dynamic>> users = [];
+  late UserViewModel vm;
 
   @override
   void initState() {
     
     super.initState();
+    vm = context.read<UserViewModel>();
     Future.microtask(() async {
-      final vm = context.read<UserViewModel>();
       vm.getUsers();
       setState(() {
         users = vm.users;
@@ -41,8 +42,8 @@ class _UserListScreenState extends State<UserListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 231, 231, 233),
-      body: SafeArea(
-        child: Column(
+      body: 
+      Column(
           children: [
             DropDown(),
 
@@ -78,10 +79,42 @@ class _UserListScreenState extends State<UserListScreen> {
                 ),
               ),
             ),
-
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(94, 0, 0, 0),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children:[
+                    Container(
+                      width:307,
+                      color: const Color.fromARGB(149, 255, 255, 255),
+                      child: TextField(
+                        controller: search,
+                        decoration: const InputDecoration(
+                          hintText: "Search transaction...",
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () async{
+                        final response = await vm.searchUsersByEmail(search.text.trim());
+                        setState(() {
+                          users = response;
+                        });
+                      },
+                      child: Icon(Icons.search, size: 30,)
+                    )
+                  ]
+                )
+              ),
+            ),
             Consumer<UserViewModel>(
               builder: (context, viewModel, child){
-                final users = viewModel.users;
                 if (users.isEmpty) {
                   return const Center(child: Text("No items available"));
                 }
@@ -136,7 +169,6 @@ class _UserListScreenState extends State<UserListScreen> {
             ),
           ],
         ),
-      ),
     );
   }
 }

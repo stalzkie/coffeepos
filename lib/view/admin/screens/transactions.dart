@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../widgets/drop_down.dart';
 import '../../../data/repositories/transaction_repository.dart';
 import '../../../data/models/cashier_transaction_model.dart';
-import '../../../data/models/cashier_order_item_model.dart';
 import 'transaction_view.dart';
 
 
@@ -14,109 +13,139 @@ class TransactionScreen extends StatefulWidget{
 }
 
 class _TransactionScreenState extends State<TransactionScreen> {
-  TransactionRepository _repo = TransactionRepository();
+  final TransactionRepository _repo = TransactionRepository();
   List<TransactionModel> _transactions = [];
+  final TextEditingController search = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     Future.microtask(() async {
-      final data = await _repo.fetchTransactionsNoFilter();
+      final data = await _repo.fetchTransactionsNoFilter("","2025-04-16");
       setState(() {
         _transactions = data;
       });
     });
   }
 
+  String formatDateCreated(DateTime date){
+    List<String> months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  
+    return '${date.day} ${months[date.month-1]}, ${date.year}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE7E7E9),
-      body: Column(
-          children: [
-            // Header
-            DropDown(),
-            // Title
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Transaction History",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+      backgroundColor: const Color.fromARGB(255, 231, 231, 233),
+      body: ListView(
+        physics: ClampingScrollPhysics(),
+        padding: const EdgeInsets.only(bottom: 24),
+        children: [
+          // Dropdown section
+          DropDown(),
+
+          const SizedBox(height: 24),
+
+          // Header
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Transaction History",
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
+          ),
 
-            // Search bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Search transaction...",
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.search),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                  ),
-                ),
+          const SizedBox(height: 16),
+
+          // Search field
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(94, 0, 0, 0),
+                borderRadius: BorderRadius.circular(10),
               ),
-            ),
-
-            SizedBox(height:16),
-
-            // Transactions list
-            Expanded(
-              child: ListView.builder(
-                // physics: NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: _transactions.length, // Replace with your real data
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: (){
-                      // redirect to transact details
-                      Navigator.push(context, 
-                      MaterialPageRoute(builder: (_) => TransactionView(transaction: _transactions[index])));
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 6),
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+              child: Row(
+                children:[
+                  Container(
+                    width:307,
+                    color: const Color.fromARGB(149, 255, 255, 255),
+                    child: TextField(
+                      controller: search,
+                      decoration: const InputDecoration(
+                        hintText: "Search transaction...",
+                        border: OutlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
                       ),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Transaction ID: ${_transactions[index].id}",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                )),
-                            SizedBox(height: 4),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Price: ${_transactions[index].totalPrice}"),
-                                Text("Date: ${_transactions[index].createdAt}"),
-                              ],
-                            ),
-                          ],
-                        ),
-                    )
-                  );
-                },
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () async{
+                      final response = await _repo.searchTransactions(search.text);
+                      
+                      setState(() {
+                        _transactions = response;
+                      });
+                    },
+                    child: Icon(Icons.search, size: 30,)
+                  )
+                ]
+              )
+              
+              
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // List of transactions
+          ..._transactions.map((tx) => GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => TransactionView(transaction: tx),
+                ),
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Transaction ID: ${tx.id}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Price: ${tx.totalPrice}"),
+                      Text("Date: ${formatDateCreated(tx.createdAt)} "),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          )),
+        ],
+      ),
     );
   }
 }

@@ -17,13 +17,16 @@ Future<List<TransactionModel>> fetchAllTransactions() async {
       .toList();
 }
 
-Future<List<TransactionModel>> fetchTransactionsNoFilter() async {
-  final response = await _client
-      .from('transactions')
-      .select()
-      .eq('status', 'paid')
-      .order('created_at', ascending: false);
+Future<List<TransactionModel>> fetchTransactionsNoFilter(String startDate, String endDate) async {
+  var query = _client
+  .from('transactions')
+  .select()
+  .eq('status', 'paid');
+  if (startDate != "") query = query.gte('created_at', "${startDate} 00:00:00");
+  if (endDate != "") query = query.lt('created_at', "${endDate} 23:59:59");
 
+  // query = query.order('created_at', ascending: false);
+  final response = await query;
   return (response as List)
       .map((json) => TransactionModel.fromJson(json))
       .toList();
@@ -31,16 +34,20 @@ Future<List<TransactionModel>> fetchTransactionsNoFilter() async {
 
   // Search transactions by ID for unpaid ones
   Future<List<TransactionModel>> searchTransactions(String query) async {
-    final response = await _client
+    if(query != ""){
+      final response = await _client
         .from('transactions')
         .select()
-        .ilike('id', '%$query%')
-        .eq('status', 'unpaid') // Fetch only unpaid transactions
+        .eq('id', int.parse(query))
+        .eq('status', 'paid') // Fetch only unpaid transactions
         .order('created_at', ascending: false);
 
-    return (response as List)
-        .map((json) => TransactionModel.fromJson(json))
-        .toList();
+      return (response as List)
+          .map((json) => TransactionModel.fromJson(json))
+          .toList();
+    }else{
+      return fetchTransactionsNoFilter("","");
+    }
   }
 
   // Fetch order items by transaction ID

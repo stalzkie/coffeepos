@@ -124,7 +124,7 @@ class SonofabeanApp extends StatelessWidget {
                     child: Text('No route defined for ${settings.name}'),
                   ),
                 ),
-              );
+              ); 
           }
         },
       ),

@@ -47,7 +47,6 @@ class SaleRecordViewModel extends ChangeNotifier{
     try{
       final response = await _supabase.rpc("get_weekly_sales");
       final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      print("response:$response");
       if(response!=null){
         for(int i = 0; i < 7; i++){
         _weeklySales[days[i]] = response[i]['sales_count'].toDouble();
