@@ -12,6 +12,7 @@ import 'view_model/cashier/payment_view_model.dart';
 // ViewModels - Customer
 import 'view_model/customer/menu_view_model.dart';
 import 'view_model/customer/order_view_model.dart';
+import 'view_model/customer/payment_view_model.dart';
 
 // Screens - Customer
 import 'view/customer/screens/menu_screen.dart';
@@ -24,9 +25,9 @@ import 'view/customer/screens/thank_you_screen.dart';
 import 'view/cashier/screens/dashboard_screen.dart';
 import 'view/cashier/screens/queue_screen.dart';
 import 'view/cashier/screens/confirm_payment_screen.dart';
-import 'view/admin/screens/inventory_screen.dart';
 
 // Admin
+import 'view/admin/screens/inventory_screen.dart';
 import 'view/admin/screens/splash_screen.dart';
 import 'view/admin/screens/dashboard_screen.dart';
 import 'view/admin/screens/transactions.dart';
@@ -62,7 +63,8 @@ class SonofabeanApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrderViewModel()),
         ChangeNotifierProvider(create: (_) => InvenItemViewModel()),
         ChangeNotifierProvider(create: (_) => SaleRecordViewModel()),
-        ChangeNotifierProvider(create: (_) => UserViewModel())
+        ChangeNotifierProvider(create: (_) => UserViewModel()),
+        ChangeNotifierProvider(create: (_) => CustomerPaymentViewModel())
       ],
       child: MaterialApp(
         title: 'Sonofabean Coffee App',
@@ -113,8 +115,11 @@ class SonofabeanApp extends StatelessWidget {
             case '/qrCode':
               return MaterialPageRoute(builder: (_) => const QrCodeScreen());
 
-            case '/thankYou':
+            case '/cashier/thankYou':
               return MaterialPageRoute(builder: (_) => const CustomerThankYouScreen());
+
+            case '/thankYou':
+              return MaterialPageRoute(builder: (_) => const CustomerThankYouScreen());//Basically the same??? Fix the views
 
             // Fallback route
             default:

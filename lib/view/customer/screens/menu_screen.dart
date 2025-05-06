@@ -15,7 +15,7 @@ class MenuScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFE7E7E9),
       body: Stack(
         children: [
-          // Header with status bar overlay
+          // Header
           Positioned(
             top: 0,
             left: 0,
@@ -105,14 +105,21 @@ class MenuScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 2),
-                          borderRadius: BorderRadius.circular(100),
+
+                      /// 🔄 Back Button
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/');
+                        },
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 2),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: const Icon(Icons.arrow_back_ios_new, size: 16),
                         ),
-                        child: const Icon(Icons.arrow_back_ios_new, size: 16),
                       ),
                     ],
                   ),
@@ -149,7 +156,7 @@ class MenuScreen extends StatelessWidget {
                     child: ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       itemCount: viewModel.filteredProducts.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 8), // 👈 spacing adjusted
+                      separatorBuilder: (_, __) => const SizedBox(height: 8),
                       itemBuilder: (context, index) {
                         final product = viewModel.filteredProducts[index];
                         return ProductCard(
