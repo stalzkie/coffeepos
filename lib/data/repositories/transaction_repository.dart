@@ -32,7 +32,6 @@ Future<List<TransactionModel>> fetchTransactionsNoFilter(String startDate, Strin
       .toList();
 }
 
-  // Search transactions by ID for unpaid ones
   Future<List<TransactionModel>> searchTransactions(String query) async {
     if(query != ""){
       final response = await _client
@@ -50,7 +49,6 @@ Future<List<TransactionModel>> fetchTransactionsNoFilter(String startDate, Strin
     }
   }
 
-  // Fetch order items by transaction ID
   Future<List<OrderItem>> fetchOrderItemsByTransactionId(String transactionId) async {
     final response = await _client
         .from('order_items')
@@ -60,7 +58,6 @@ Future<List<TransactionModel>> fetchTransactionsNoFilter(String startDate, Strin
     return (response as List).map((json) => OrderItem.fromJson(json)).toList();
   }
 
-  // Update order items in the database
   Future<void> updateOrderItems({
     required String transactionId,
     required List<OrderItem> updatedItems,
@@ -80,7 +77,6 @@ Future<List<TransactionModel>> fetchTransactionsNoFilter(String startDate, Strin
     await updateTransactionTotalPrice(transactionId, newTotal);
   }
 
-  // Update the total price of a transaction
   Future<void> updateTransactionTotalPrice(String transactionId, double newTotal) async {
     await _client
         .from('transactions')
@@ -88,11 +84,18 @@ Future<List<TransactionModel>> fetchTransactionsNoFilter(String startDate, Strin
         .eq('id', transactionId);
   }
 
-  // Mark the transaction as paid
   Future<void> markTransactionAsPaid(String transactionId) async {
     await _client
         .from('transactions')
         .update({'status': 'paid'}) // ✅ Make sure this field is updated
         .eq('id', transactionId);
+  }
+
+  Future<void> deleteTransactionFromID(String transactionID) async {
+    try{
+      await _client.from('transactions').delete().eq('id', transactionID);
+    }catch (e){
+      print("error with deleting transaction:$e");
+    }
   }
 }

@@ -67,4 +67,15 @@ class UserViewModel extends ChangeNotifier{
       return [];
     }
   }
+
+  Future<String> getUserTypeByID(String UUID) async {
+    try{
+      final response = await _supabase.from('profiles')
+                      .select('role').eq('id', UUID).single();
+      return response['role'];
+    }catch(e){
+      print("erroe with getting user type by id: $e");
+      return "";
+    }
+  }
 }

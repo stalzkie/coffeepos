@@ -19,35 +19,26 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
   Widget build(BuildContext context) {
     final orderVM = Provider.of<OrderViewModel>(context);
 
-    final imageUrl = widget.product.imageUrl.startsWith('http')
-        ? widget.product.imageUrl
-        : 'https://tepdcxtlykiugezsaamc.supabase.co/storage/v1/object/public/product-images/${widget.product.imageUrl}';
+    final imageUrl = widget.product.imageUrl;
 
     return Scaffold(
       backgroundColor: const Color(0xFFE7E7E9),
       body: Stack(
         children: [
-          // 🖼 Background image with blur
           Positioned.fill(
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const Center(
-                    child: Icon(Icons.image_not_supported, size: 100, color: Colors.grey),
-                  ),
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const Center(
+                  child: Icon(Icons.image_not_supported, size: 100, color: Colors.grey),
                 ),
-                BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                  child: Container(color: Colors.black.withOpacity(0.1)),
-                ),
-              ],
+              ),
             ),
           ),
 
-          // 🟤 Top header
+    
           Positioned(
             top: 0,
             left: 0,
@@ -75,8 +66,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
               ),
             ),
           ),
-
-          // 🧾 White content container
           Positioned(
             top: 340,
             left: 0,
@@ -123,8 +112,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                     ],
                   ),
                   const SizedBox(height: 10),
-
-                  // 💸 Price row
                   Row(
                     children: [
                       const Text(
@@ -149,8 +136,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-
-                  // 📝 Description
                   const Text(
                     'Description',
                     style: TextStyle(
@@ -178,8 +163,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                   ),
 
                   const SizedBox(height: 20),
-
-                  // 🔢 Quantity controls
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -213,8 +196,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
                   ),
 
                   const Spacer(),
-
-                  // 🟩 Confirm button
                   GestureDetector(
                     onTap: () {
                       for (int i = 0; i < quantity; i++) {

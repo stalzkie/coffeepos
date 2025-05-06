@@ -28,7 +28,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: const Color(0xFFE7E7E9),
       body: Column(
         children: [
-          // 🟤 Header
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             height: showMoreActions ? 130 : 99,
@@ -112,7 +111,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           const SizedBox(height: 30),
 
-          // Greeting
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: Align(
@@ -148,7 +146,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           const SizedBox(height: 30),
 
-          // Navigation buttons + alert widget
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(

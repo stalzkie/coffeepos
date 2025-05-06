@@ -34,10 +34,10 @@ class _InventoryViewState extends State<InventoryView>{
       child: Column(
         children: [
           Container(
-            width: 393,
-            height: 852,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-              color: const Color(0xFFE7E7E9),
+              color: const Color.fromARGB(255, 212, 212, 212),
             ),
             child: Stack(
               children: [
@@ -45,7 +45,7 @@ class _InventoryViewState extends State<InventoryView>{
                   left: 0,
                   top: -220,
                   child: Container(
-                    width: 393,
+                    width: MediaQuery.of(context).size.width,
                     height: 852,
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(),
@@ -55,8 +55,9 @@ class _InventoryViewState extends State<InventoryView>{
                 Positioned(
                   left: 0,
                   top: 364,
+                  bottom:0,
                   child: Container(
-                    width: 393,
+                    width: MediaQuery.of(context).size.width,
                     height: 550,
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                     clipBehavior: Clip.antiAlias,

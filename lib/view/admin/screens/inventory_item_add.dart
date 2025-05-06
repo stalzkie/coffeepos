@@ -52,10 +52,10 @@ class _InventoryAddState extends State<InventoryAdd> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          width: 400,
-          height: 890,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
-            color: Color(0xFFE7E7E9),
+            color: Color.fromARGB(255, 41, 41, 73),
           ),
           child: Stack(
             children: [
@@ -63,7 +63,7 @@ class _InventoryAddState extends State<InventoryAdd> {
                 left: 0,
                 top: -250,
                 child: Container(
-                  width: 393,
+                  width: MediaQuery.of(context).size.width,
                   height: 852,
                   child: Image.network(
                     "https://withsaltandwit.com/wp-content/uploads/2014/03/Perfect-Homemade-Iced-Coffee-Cold-Brew-2.jpg",
@@ -73,8 +73,9 @@ class _InventoryAddState extends State<InventoryAdd> {
               Positioned(
                 left: 0,
                 top: 364,
+                bottom: 0,
                 child: Container(
-                  width: 400,
+                  width: MediaQuery.of(context).size.width,
                   height: 520,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                   decoration: const ShapeDecoration(

@@ -34,7 +34,6 @@ class _TransactionViewState extends State<TransactionView> {
         _orders = response;
         for(var order_item in _orders){
           _totalAmount += order_item.quantity * order_item.price;
-
         }
       });
     });
@@ -178,7 +177,8 @@ class _TransactionViewState extends State<TransactionView> {
                               padding: EdgeInsets.zero
                             ),
                             onPressed: (){
-                              // delete transaction
+                              repo.deleteTransactionFromID(_transaction.id);
+                              Navigator.popAndPushNamed(context, "/transactions");
                             },
                             child:Container(
                               decoration: BoxDecoration(

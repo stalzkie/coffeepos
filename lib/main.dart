@@ -25,6 +25,7 @@ import 'view/customer/screens/thank_you_screen.dart';
 import 'view/cashier/screens/dashboard_screen.dart';
 import 'view/cashier/screens/queue_screen.dart';
 import 'view/cashier/screens/confirm_payment_screen.dart';
+import 'view/cashier/screens/cashier_thank_you_screen.dart';
 
 // Admin
 import 'view/admin/screens/inventory_screen.dart';
@@ -119,7 +120,7 @@ class SonofabeanApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => const CustomerThankYouScreen());
 
             case '/thankYou':
-              return MaterialPageRoute(builder: (_) => const CustomerThankYouScreen());//Basically the same??? Fix the views
+              return MaterialPageRoute(builder: (_) => const ThankYouScreen());
 
             // Fallback route
             default:

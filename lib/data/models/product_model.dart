@@ -43,7 +43,6 @@ class Product {
     };
   }
 
-  // ✅ Optional helper for building full image URL
   String get fullImageUrl {
     final trimmed = imageUrl.trim();
     return trimmed.startsWith('http')

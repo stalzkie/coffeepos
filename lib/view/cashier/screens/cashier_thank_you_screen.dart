@@ -9,7 +9,6 @@ class ThankYouScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFE7E7E9),
       body: Column(
         children: [
-          // 🟤 Header
           Container(
             height: 99,
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
@@ -35,7 +34,6 @@ class ThankYouScreen extends StatelessWidget {
 
           const Spacer(),
 
-          // 🎉 Message
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
@@ -52,14 +50,13 @@ class ThankYouScreen extends StatelessWidget {
 
           const SizedBox(height: 40),
 
-          // ✅ Back to Queue Button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: GestureDetector(
               onTap: () {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
-                  '/queue', // not /cashier/queue unless your route is named that
+                  '/queue', 
                   (route) => false,
                 );
               },

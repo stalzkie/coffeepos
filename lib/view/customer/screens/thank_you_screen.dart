@@ -14,8 +14,6 @@ class CustomerThankYouScreen extends StatelessWidget {
       0,
       (sum, item) => sum + (item.product.price * item.quantity),
     );
-
-    // Step 1: Insert into `transactions` table
     final txResponse = await client
         .from('transactions')
         .insert({
@@ -27,8 +25,6 @@ class CustomerThankYouScreen extends StatelessWidget {
         .single();
 
     final transactionId = txResponse['id'];
-
-    // Step 2: Insert each order item into `order_items` table
     final orderRows = orderItems.map((item) => {
           'transaction_id': transactionId,
           'product_id': item.product.id,
@@ -47,7 +43,6 @@ class CustomerThankYouScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFE7E7E9),
       body: Column(
         children: [
-          // 🟤 Header
           Container(
             height: 99,
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
@@ -73,7 +68,6 @@ class CustomerThankYouScreen extends StatelessWidget {
 
           const Spacer(),
 
-          // 🎉 Message
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
@@ -90,7 +84,6 @@ class CustomerThankYouScreen extends StatelessWidget {
 
           const SizedBox(height: 40),
 
-          // ✅ Confirm Button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: GestureDetector(

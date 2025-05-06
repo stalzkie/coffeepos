@@ -18,6 +18,7 @@ class _InventoryEditState extends State<InventoryEdit> {
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final _editFormKey = GlobalKey<FormState>();
   
   late InventoryItem _item;
   late InvenItemViewModel _item_vm;
@@ -78,10 +79,10 @@ class _InventoryEditState extends State<InventoryEdit> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          width: 393,
-          height: 880,
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: Color.fromARGB(255, 212, 212, 212),
           ),
           child: Stack(
             children: [
@@ -89,18 +90,19 @@ class _InventoryEditState extends State<InventoryEdit> {
                 left: 0,
                 top: -250,
                 child: Container(
-                  width: 393,
+                  width: MediaQuery.of(context).size.width,
                   height: 852,
                   child: Image.network(
-                    (_item.imagePath != null ? _item.imagePath : "")!
+                    (_item.imagePath ?? "")
                   ),
                 ),
               ),
               Positioned(
                 left: 0,
                 top: 364,
+                bottom: 0,
                 child: Container(
-                  width: 393,
+                  width: MediaQuery.of(context).size.width,
                   height: 530,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                   decoration: const ShapeDecoration(
@@ -112,106 +114,139 @@ class _InventoryEditState extends State<InventoryEdit> {
                       ),
                     ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Name and Back button
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 285,
-                            height: 36,
-                            child: Text(
-                              _item.name,
-                              style: TextStyle(
-                                color: const Color(0xFF1E1E1E),
-                                fontSize: 24,
-                                fontFamily: 'Figtree',
-                                fontWeight: FontWeight.w600,
+                  child: Form(
+                    key: _editFormKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 285,
+                              height: 36,
+                              child: Text(
+                                _item.name,
+                                style: TextStyle(
+                                  color: const Color(0xFF1E1E1E),
+                                  fontSize: 24,
+                                  fontFamily: 'Figtree',
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: const Icon(Icons.arrow_back),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Quantity and Price
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _quantityController,
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "Quantity",
-                              ),
+                            IconButton(
+                              onPressed: () => Navigator.pop(context),
+                              icon: const Icon(Icons.arrow_back),
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: TextField(
-                              controller: _priceController,
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "Price",
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Description
-                      const Text(
-                        'Description',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 5),
-                      TextField(
-                        controller: _descriptionController,
-                        maxLines: 5,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "Enter description",
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.redAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                validator: (value){
+                                  final submittedValue = value!.trim();
+                                  if(submittedValue == null || submittedValue.isEmpty){
+                                    return "This field can't be left empty";
+                                  }
+                                  if(double.tryParse(submittedValue) == null){
+                                    return "Must be numeric";
+                                  }
+                                  if(double.parse(submittedValue) < 0){
+                                    return "Must be non-negative";
+                                  }
+                                  return null;
+                                },
+                                controller: _quantityController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Quantity",
+                                ),
                               ),
                             ),
-                            onPressed: _cancel,
-                            child: const Text('Cancel'),
-                          ),
-                          const SizedBox(width: 20),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.greenAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextFormField(
+                                validator: (value){
+                                  if(value == null || value.isEmpty){
+                                    return "This field can't be left empty";
+                                  }
+                                  if(double.tryParse(value) == null){
+                                    return "Must be numeric";
+                                  }
+                                  if(double.parse(value) < 0){
+                                    return "Must be non-negative";
+                                  }
+                                  return null;
+                                },
+                                controller: _priceController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Price",
+                                ),
                               ),
                             ),
-                            onPressed: _saveItem,
-                            child: const Text('Save'),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'Description',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 5),
+                        TextFormField(
+                          validator: (value){
+                            final submittedValue = value!.trim();
+                            if(submittedValue == null || submittedValue.isEmpty){
+                              return "This field can't be left empty";
+                            }
+                            return null;
+                          },
+                          controller: _descriptionController,
+                          maxLines: 5,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: "Enter description",
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.redAccent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                              onPressed: _cancel,
+                              child: const Text('Cancel'),
+                            ),
+                            const SizedBox(width: 20),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.greenAccent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
+                              onPressed: (){
+                                if(_editFormKey.currentState!.validate()){
+                                  _saveItem();
+                                }
+                              },
+                              child: const Text('Save'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ) 
+                  
                 ),
               ),
             ],

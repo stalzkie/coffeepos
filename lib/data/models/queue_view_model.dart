@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../data/models/cashier_transaction_model.dart';
 import '../repositories/transaction_repository.dart';
 
 class QueueViewModel extends ChangeNotifier {
-  final SupabaseClient _client = Supabase.instance.client;
-
   List<TransactionModel> _transactions = [];
   List<TransactionModel> get transactions => _transactions;
 
@@ -13,7 +10,7 @@ class QueueViewModel extends ChangeNotifier {
   String get searchQuery => _searchQuery;
 
 Future<void> fetchTransactions() async {
-  _transactions = await TransactionRepository().fetchAllTransactions(); // ✅
+  _transactions = await TransactionRepository().fetchAllTransactions(); 
   notifyListeners();
 }
 
