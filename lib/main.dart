@@ -117,10 +117,10 @@ class SonofabeanApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => const QrCodeScreen());
 
             case '/cashier/thankYou':
-              return MaterialPageRoute(builder: (_) => const CustomerThankYouScreen());
+              return MaterialPageRoute(builder: (_) => const ThankYouScreen());
 
             case '/thankYou':
-              return MaterialPageRoute(builder: (_) => const ThankYouScreen());
+              return MaterialPageRoute(builder: (_) => const CustomerThankYouScreen());
 
             // Fallback route
             default:

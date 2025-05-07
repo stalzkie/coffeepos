@@ -21,7 +21,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   void initState() {
     super.initState();
     Future.microtask(() async {
-      final data = await _repo.fetchTransactionsNoFilter("","2025-04-16");
+      final data = await _repo.fetchTransactionsNoFilter("","");
       setState(() {
         _transactions = data;
       });
@@ -42,12 +42,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
         physics: ClampingScrollPhysics(),
         padding: const EdgeInsets.only(bottom: 24),
         children: [
-          // Dropdown section
           DropDown(),
 
           const SizedBox(height: 24),
 
-          // Header
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Align(
@@ -64,7 +62,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
           const SizedBox(height: 16),
 
-          // Search field
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Container(
@@ -98,14 +95,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   )
                 ]
               )
-              
-              
             ),
           ),
 
           const SizedBox(height: 16),
 
-          // List of transactions
           ..._transactions.map((tx) => GestureDetector(
             onTap: () {
               Navigator.push(
